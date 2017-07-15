@@ -19,7 +19,13 @@ app.use('/api/marathon/**', proxy({
 
 app.get('/api/docker-registry/labels/:imageName(*)', (req, res) => {
   dockerLabels.getLabels(req.params.imageName)
-    .then(json => { res.json(json) })
+    .then(json => {
+      if (json) {
+        res.json(json)
+      } else {
+        res.status(404).send({ message: `Image ${req.params.imageName} not found` })
+      }
+    })
     .catch(e => { res.status(500).send(e.message) })
 })
 
