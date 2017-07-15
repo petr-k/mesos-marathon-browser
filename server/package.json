@@ -1,0 +1,11 @@
+{
+  "name": "mmcloud-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "docker-registry-client": "3.2.7",
+    "express": "^4.15.3",
+    "http-proxy-middleware": "^0.17.4"
+  }
+}

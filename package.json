@@ -1,0 +1,50 @@
+{
+  "name": "mmcloud",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start-client": "react-scripts start",
+    "start-server": "node server/index.js",
+    "start": "concurrently \"yarn start-server\" \"yarn start-client\"",
+    "build": "react-scripts build",
+    "jest": "jest",
+    "test": "jest"
+  },
+  "dependencies": {
+    "docker-registry-client": "^3.2.7",
+    "lodash": "^4.17.4",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-redux": "^5.0.5",
+    "redux": "^3.7.1",
+    "redux-thunk": "^2.2.0",
+    "semantic-ui-react": "^0.71.0"
+  },
+  "devDependencies": {
+    "babel-jest": "^20.0.3",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-1": "^6.24.1",
+    "concurrently": "^3.5.0",
+    "eslint-config-airbnb": "^15.0.2",
+    "eslint-plugin-chai-expect": "^1.1.1",
+    "eslint-plugin-chai-friendly": "^0.3.6",
+    "flow-bin": "^0.49.1",
+    "jest": "^20.0.4",
+    "jest-teamcity-reporter": "^0.6.2",
+    "react-scripts": "1.0.10"
+  },
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:3001"
+    }
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "testResultsProcessor": "jest-teamcity-reporter",
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  }
+}
