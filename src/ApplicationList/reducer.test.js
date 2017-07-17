@@ -8,7 +8,7 @@ it('should apply loaded Docker image metadata', () => {
       container: {
         type: 'DOCKER',
         docker: {
-          image: 'IMAGE-NAME-A'
+          image: 'image-name-a'
         }
       }
     },
