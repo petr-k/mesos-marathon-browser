@@ -18,14 +18,13 @@ export default class ApplicationItem extends React.PureComponent {
     return (
       <Card fluid color={color} className="application-item">
         <Card.Content>
-          {/* <Label color={color} ribbon style={{ marginBottom: '0.5em' }}><h3>{definition.id}<Loader active /> </h3> {ApplicationItem.getStatesString(definition)}</Label> */}
           <Card.Header>
             <span className="middle-inline-block">{definition.id}</span>
             <Label className="middle-inline-block" horizontal color={color}>{ApplicationItem.getStatesString(definition)}</Label>
           </Card.Header>
           <Card.Description>
             {(appLabelCount || imageLabelCount) ? (
-              <Grid columns={2}>
+              <Grid columns={2} stackable>
                 <Grid.Row className="label-list-row">
                   <Grid.Column>
                     <Divider horizontal fitted>{appLabelCount} application labels</Divider>
