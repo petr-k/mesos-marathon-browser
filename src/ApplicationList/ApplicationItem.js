@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import { Card, Grid, Divider } from 'semantic-ui-react'
+import { Card, Grid, Divider, Label } from 'semantic-ui-react'
 import type { App } from './reducer'
 import type { AppDefinition } from './../api'
 import LabelList from './LabelList'
@@ -13,11 +13,16 @@ export default class ApplicationItem extends React.PureComponent {
   render() {
     const { app: { definition, imageMetadata } } = this.props
     const [appLabelCount, imageLabelCount] = [definition.labels, imageMetadata.labels].map(Object.keys).map(v => v.length)
+    const color = ApplicationItem.getStatesColor(definition)
+
     return (
-      <Card fluid color={ApplicationItem.getStatesColor(definition)}>
+      <Card fluid color={color} className="application-item">
         <Card.Content>
-          <Card.Header>{definition.id}</Card.Header>
-          <Card.Meta>{ApplicationItem.getStatesString(definition)}</Card.Meta>
+          {/* <Label color={color} ribbon style={{ marginBottom: '0.5em' }}><h3>{definition.id}<Loader active /> </h3> {ApplicationItem.getStatesString(definition)}</Label> */}
+          <Card.Header>
+            <span className="middle-inline-block">{definition.id}</span>
+            <Label className="middle-inline-block" horizontal color={color}>{ApplicationItem.getStatesString(definition)}</Label>
+          </Card.Header>
           <Card.Description>
             {(appLabelCount || imageLabelCount) ? (
               <Grid columns={2}>
