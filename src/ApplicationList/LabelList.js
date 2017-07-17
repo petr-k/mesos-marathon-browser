@@ -10,9 +10,10 @@ export default class LabelList extends React.PureComponent {
 
   render() {
     const { labels } = this.props
+    const orderedNames = sortBy(Object.keys(labels), l => l.toLowerCase())
     return (
       <ul>
-        {sortBy(Object.keys(labels)).map(name => <li key={name}><em>{name}: <Linkify properties={{ target: '_blank' }}>{labels[name]}</Linkify></em></li>)}
+        {orderedNames.map(name => <li key={name}><em>{name}: <Linkify properties={{ target: '_blank' }}>{labels[name]}</Linkify></em></li>)}
       </ul>
     )
   }
