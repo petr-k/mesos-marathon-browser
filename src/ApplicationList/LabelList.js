@@ -1,5 +1,7 @@
 // @flow
 import React from 'react'
+import Linkify from 'react-linkify'
+import { sortBy } from 'lodash'
 
 export default class LabelList extends React.PureComponent {
   props: {
@@ -10,7 +12,7 @@ export default class LabelList extends React.PureComponent {
     const { labels } = this.props
     return (
       <ul>
-        {Object.keys(labels).map(name => <li key={name}><em>{name}: {labels[name]}</em></li>)}
+        {sortBy(Object.keys(labels)).map(name => <li key={name}><em>{name}: <Linkify properties={{ target: '_blank' }}>{labels[name]}</Linkify></em></li>)}
       </ul>
     )
   }
