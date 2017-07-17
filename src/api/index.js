@@ -55,21 +55,45 @@ export type AppDefinition = {
   tasksUnhealthy: number,
 }
 
-class MarathonClient {
+export type DockerImageMetadata = {
+  labels: {
+    [name: string]: string,
+  }
+}
+
+export type DockerImageMetadataBatch = {
+  [imageName: string]: ?DockerImageMetadata
+}
+
+class ApiClient {
   url: string
 
   constructor(url: string) {
     this.url = url
   }
 
-  getApps() {
-    const result = fetch(`${this.url}/v2/apps`)
+  getApps(): Promise<AppsResponse> {
+    const result = fetch(`${this.url}/marathon/v2/apps`)
       .then(r => r.json())
     return (result: Promise<AppsResponse>)
   }
+
+  getDockerImageMetadata(imageName: string): Promise<DockerImageMetadata> {
+    const result = fetch(`${this.url}/docker-registry/metadata/${imageName}`)
+      .then(r => r.json())
+    return (result: Promise<DockerImageMetadata>)
+  }
+
+  getDockerImageMetadataBatch(imageNames: string[]): Promise<DockerImageMetadataBatch> {
+    const result = (fetch: any)(`${this.url}/docker-registry/metadata`, {
+      method: 'POST',
+      body: JSON.stringify(imageNames),
+    }).then(r => r.json())
+    return (result: Promise<DockerImageMetadataBatch>)
+  }
 }
 
-const client = new MarathonClient('/api/marathon')
+const client = new ApiClient('/api/')
 
 export default client
 

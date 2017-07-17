@@ -3,15 +3,20 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Container, Message, Loader } from 'semantic-ui-react'
 import type { RootState } from './../store'
-import { loadApplications, setFilterText } from './actions'
+import type { AppsResponse } from './../api'
+import { loadApplications, setFilterText, loadImageMetadata } from './actions'
 import { returnTypeOf } from './../common/redux-flow'
 import ApplicationItemGroup from './ApplicationItemGroup'
 import Filter from './Filter'
+import { getDockerImageName } from './reducer'
 import './ApplicationList.css'
 
 class ApplicationList extends React.PureComponent {
   componentDidMount() {
-    this.props.loadApplications()
+    (this.props.loadApplications(): any).then((r: AppsResponse) => {
+      const imageNames: string[] = (r.apps.map(getDockerImageName).filter(n => n): any)
+      this.props.loadImageMetadata(imageNames)
+    })
   }
 
   props: Props
@@ -48,6 +53,7 @@ const mapStateToProps = (rootState: RootState) => ({
 const mapDispatchToProps = {
   setFilterText,
   loadApplications,
+  loadImageMetadata,
 }
 
 const mapStateToPropsType = returnTypeOf(mapStateToProps)

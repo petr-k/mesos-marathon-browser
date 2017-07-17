@@ -8,10 +8,12 @@
     "start": "concurrently \"yarn start-server\" \"yarn start-client\"",
     "build": "react-scripts build",
     "jest": "jest",
-    "test": "jest"
+    "test": "jest",
+    "test:dev": "jest --watch"
   },
   "dependencies": {
     "bluebird": "^3.5.0",
+    "body-parser": "^1.17.2",
     "docker-registry-client": "^3.2.7",
     "lodash": "^4.17.4",
     "react": "^15.6.1",

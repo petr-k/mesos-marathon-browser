@@ -1,16 +1,29 @@
 // @flow
-import type { AppDefinition } from './../marathon'
+import { mapValues, mapKeys } from 'lodash'
+import type { AppDefinition } from './../api'
 import type { Action } from './actions'
 import appMatcher from './appMatcher'
 
 export type App = {
   +definition: AppDefinition,
+  +imageMetadata: ImageMetadata,
+}
+
+export type ImageMetadata = {
+  +labels: ImageLabels,
+  +isLoading: boolean,
+}
+
+type AppsById = {
+  [id: string]: App,
+}
+
+export type ImageLabels = {
+  [name: string]: string,
 }
 
 export type State = {
-  +apps: {
-    [id: string]: App,
-  },
+  +apps: AppsById,
   +visibleApps: App[],
   +isLoading: boolean,
   +loadError: ?string,
@@ -25,9 +38,39 @@ export const initialState: State = {
   filterText: '',
 }
 
-function visibleApps(state: State, apps: {[id: string]: App} = state.apps, filter: string = state.filterText): App[] {
+function visibleApps(state: State, apps: AppsById = state.apps, filter: string = state.filterText): App[] {
   const appList = Object.keys(apps).map(id => apps[id])
   return appMatcher(appList, filter)
+}
+
+function reduceImageMetadata<A, T: { [imageName: string]: A }>(state: State, obj: T, metadataReducer: (ImageMetadata, A) => ImageMetadata): State {
+  const apps = mapValues(state.apps, (app: App) => {
+    const imageName = getDockerImageName(app.definition)
+    if (imageName) {
+      const metadataObj = obj[imageName]
+      if (metadataObj) {
+        const metadata = metadataReducer(app.imageMetadata, metadataObj)
+        return {
+          ...app,
+          imageMetadata: metadata,
+        }
+      }
+    }
+    return app
+  })
+
+  return {
+    ...state,
+    apps,
+    visibleApps: [...state.visibleApps.map(a => apps[a.definition.id])],
+  }
+}
+
+export function getDockerImageName(definition: AppDefinition): ?string {
+  if (definition && definition.container && definition.container.type === 'DOCKER') {
+    return definition.container.docker.image
+  }
+  return undefined
 }
 
 export default function(state: State = initialState, action: Action): State {
@@ -36,8 +79,13 @@ export default function(state: State = initialState, action: Action): State {
       const apps = action.response.apps.reduce((o, p) => {
         const appObj = o[p.id]
         o[p.id] = { // eslint-disable-line no-param-reassign
-          ...appObj || {},
-          definition: p,
+          ...appObj || {
+            imageMetadata: {
+              labels: {},
+              isLoading: false,
+            },
+          },
+          definition: p
         }
         return o
       }, {})
@@ -67,6 +115,21 @@ export default function(state: State = initialState, action: Action): State {
         filterText: action.text,
         visibleApps: visibleApps(state, state.apps, action.text),
       }
+    case 'LoadImageMetadataStarted':
+      return state
+      // const mapped: { [string]: {} } = (action.imageNames.map(imageName => ({ [imageName]: {} })): any)
+      // const a = Object.assign.call(this, mapped)
+      // return reduceImageMetadata(state, a, (m, r) => ({
+      //   ...m,
+      //   isLoading: true,
+      // }))
+    case 'LoadImageMetadata':
+      return reduceImageMetadata(state, action.results, (m, r) => ({
+        ...m,
+        labels: r ? r.labels : {},
+      }))
+    case 'LoadImageMetadataFailed':
+      return state
     default:
       (action: empty)
       return state

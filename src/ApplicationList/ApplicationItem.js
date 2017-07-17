@@ -1,8 +1,9 @@
 // @flow
 import React from 'react'
-import { Card } from 'semantic-ui-react'
+import { Card, Grid, Divider } from 'semantic-ui-react'
 import type { App } from './reducer'
-import type { AppDefinition } from './../marathon'
+import type { AppDefinition } from './../api'
+import LabelList from './LabelList'
 
 export default class ApplicationItem extends React.PureComponent {
   props: {
@@ -10,17 +11,32 @@ export default class ApplicationItem extends React.PureComponent {
   }
 
   render() {
-    const { app: { definition } } = this.props
-
-    console.log(definition.id)
-
+    const { app: { definition, imageMetadata } } = this.props
+    const [appLabelCount, imageLabelCount] = [definition.labels, imageMetadata.labels].map(Object.keys).map(v => v.length)
     return (
-      <Card
-        fluid
-        header={definition.id}
-        description={ApplicationItem.getStatesString(definition)}
-        color={ApplicationItem.getStatesColor(definition)}
-      />
+      <Card fluid color={ApplicationItem.getStatesColor(definition)}>
+        <Card.Content>
+          <Card.Header>{definition.id}</Card.Header>
+          <Card.Meta>{ApplicationItem.getStatesString(definition)}</Card.Meta>
+          <Card.Description>
+            {(appLabelCount || imageLabelCount) ? (
+              <Grid columns={2}>
+                <Grid.Row className="label-list-row">
+                  <Grid.Column>
+                    <Divider horizontal fitted>{appLabelCount} application labels</Divider>
+                    <LabelList labels={definition.labels} />
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Divider horizontal fitted>{imageLabelCount} docker image labels</Divider>
+                    <LabelList labels={imageMetadata.labels} />
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+              ) : null
+            }
+          </Card.Description>
+        </Card.Content>
+      </Card>
     )
   }
 

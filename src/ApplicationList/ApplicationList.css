@@ -1,3 +1,18 @@
 .applications-content {
   margin-top: 1.5em;
 }
+
+.label-list-row .column {
+  margin: 0
+}
+
+.label-list-row ul {
+  margin: 0;
+  margin-top: 0.3em;
+}
+
+.label-list-row .divider {
+  font-weight: normal;
+  text-transform: none;
+  color: gray;
+}
