@@ -4,12 +4,11 @@ const dockerMetadata = require('./dockerMetadata')
 const bodyParser = require('body-parser')
 
 const app = express()
-const root = __dirname
 
 app.set('port', (process.env.APP_PORT || 3001))
 app.set('marathon_url', (process.env.MARATHON_URL || 'http://marathon.whale.int.avast.com/'))
 
-app.use(express.static(root))
+app.use(express.static('build'))
 app.use(bodyParser.json({
   type: '*/*',
 }))

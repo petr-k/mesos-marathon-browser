@@ -93,7 +93,7 @@ class ApiClient {
   }
 }
 
-const client = new ApiClient('/api/')
+const client = new ApiClient('/api')
 
 export default client
 
