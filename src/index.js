@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDom from 'react-dom'
 import { Provider } from 'react-redux'
+import 'babel-polyfill'
 import App from './App'
 import store from './store'
 import './index.css'
