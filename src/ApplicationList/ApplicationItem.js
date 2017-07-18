@@ -4,6 +4,7 @@ import { Card, Grid, Divider, Label, Icon } from 'semantic-ui-react'
 import type { App } from './reducer'
 import type { AppDefinition } from './../api'
 import LabelList from './LabelList'
+import ApplicationItemMeta from './ApplicationItemMeta'
 
 export default class ApplicationItem extends React.PureComponent {
   props: {
@@ -23,6 +24,7 @@ export default class ApplicationItem extends React.PureComponent {
             <Label className="middle-inline-block" horizontal color={color}>{ApplicationItem.getStatesString(definition)}</Label>
             {imageMetadata.isLoading && <Label as="a" corner><Icon name="circle notched" loading /></Label>}
           </Card.Header>
+          <ApplicationItemMeta definition={definition} />
           <Card.Description>
             {(appLabelCount || imageLabelCount) ? (
               <Grid columns={2} stackable>
