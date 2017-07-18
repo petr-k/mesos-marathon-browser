@@ -5,11 +5,11 @@ import apiClient from './../api'
 import type { AppsResponse, DockerImageMetadataBatch } from './../api'
 
 type LoadApplicationsStarted = { type: 'LoadApplicationsStarted' }
-type LoadApplications = { type: 'LoadApplications', response: AppsResponse }
+export type LoadApplications = { type: 'LoadApplications', response: AppsResponse }
 type LoadApplicationsFailed = { type: 'LoadApplicationsFailed', error: string }
 type SetFilterText = { type: 'SetFilterText', text: string }
 type LoadImageMetadataStarted = { type: 'LoadImageMetadataStarted', imageNames: string[] }
-type LoadImageMetadata = { type: 'LoadImageMetadata', results: DockerImageMetadataBatch }
+export type LoadImageMetadata = { type: 'LoadImageMetadata', results: DockerImageMetadataBatch }
 type LoadImageMetadataFailed = { type: 'LoadImageMetadataFailed', error: string, imageNames: string[] }
 
 export type Action =

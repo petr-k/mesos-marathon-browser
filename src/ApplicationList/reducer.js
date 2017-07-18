@@ -1,5 +1,5 @@
 // @flow
-import { mapValues, includes } from 'lodash'
+import { mapValues, includes, isEqual } from 'lodash'
 import type { AppDefinition } from './../api'
 import type { Action } from './actions'
 import appMatcher from './appMatcher'
@@ -27,6 +27,7 @@ export type State = {
   +apps: AppsById,
   +visibleApps: App[],
   +isLoading: boolean,
+  +wasLoaded: boolean,
   +loadError: ?string,
   +filterText: string,
 }
@@ -35,6 +36,7 @@ export const initialState: State = {
   apps: {},
   visibleApps: [],
   isLoading: false,
+  wasLoaded: false,
   loadError: null,
   filterText: '',
 }
@@ -78,9 +80,14 @@ export default function(state: State = initialState, action: Action): State {
   switch (action.type) {
     case 'LoadApplications': {
       const apps = action.response.apps.reduce((o, p) => {
-        const appObj = o[p.id]
+        const existingAppObj = o[p.id]
+        if (existingAppObj && isEqual(existingAppObj.definition, p)) {
+          o[p.id] = existingAppObj // eslint-disable-line no-param-reassign
+          return o
+        }
+
         o[p.id] = { // eslint-disable-line no-param-reassign
-          ...appObj || {
+          ...existingAppObj || {
             imageMetadata: {
               labels: {},
               isLoading: false,
@@ -89,11 +96,12 @@ export default function(state: State = initialState, action: Action): State {
           definition: p
         }
         return o
-      }, {})
+      }, state.apps)
 
       return {
         ...state,
         isLoading: false,
+        wasLoaded: true,
         apps,
         visibleApps: visibleApps(state, apps),
       }
