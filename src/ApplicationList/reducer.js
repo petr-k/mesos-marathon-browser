@@ -1,5 +1,5 @@
 // @flow
-import { mapValues, mapKeys } from 'lodash'
+import { mapValues, includes } from 'lodash'
 import type { AppDefinition } from './../api'
 import type { Action } from './actions'
 import appMatcher from './appMatcher'
@@ -11,7 +11,8 @@ export type App = {
 
 export type ImageMetadata = {
   +labels: ImageLabels,
-  +isLoading: boolean,
+  +isLoading: ?boolean,
+  loaded: ?boolean,
 }
 
 type AppsById = {
@@ -102,31 +103,45 @@ export default function(state: State = initialState, action: Action): State {
         ...state,
         isLoading: true,
       }
-    case 'LoadApplicationsFailed': {
+    case 'LoadApplicationsFailed':
       return {
         ...state,
         isLoading: false,
         loadError: action.error,
       }
-    }
     case 'SetFilterText':
       return {
         ...state,
         filterText: action.text,
         visibleApps: visibleApps(state, state.apps, action.text),
       }
-    case 'LoadImageMetadataStarted':
-      return state
-      // const mapped: { [string]: {} } = (action.imageNames.map(imageName => ({ [imageName]: {} })): any)
-      // const a = Object.assign.call(this, mapped)
-      // return reduceImageMetadata(state, a, (m, r) => ({
-      //   ...m,
-      //   isLoading: true,
-      // }))
+    case 'LoadImageMetadataStarted': {
+      const imageNames = action.imageNames
+      const apps = mapValues(state.apps, (app: App) => {
+        const imageName = getDockerImageName(app.definition)
+        if (imageName && includes(imageNames, imageName)) {
+          return {
+            ...app,
+            imageMetadata: {
+              ...app.imageMetadata,
+              isLoading: true,
+            }
+          }
+        }
+        return app
+      })
+      return {
+        ...state,
+        apps,
+        visibleApps: [...state.visibleApps.map(a => apps[a.definition.id])],
+      }
+    }
     case 'LoadImageMetadata':
       return reduceImageMetadata(state, action.results, (m, r) => ({
         ...m,
         labels: r ? r.labels : {},
+        isLoading: false,
+        loaded: true,
       }))
     case 'LoadImageMetadataFailed':
       return state

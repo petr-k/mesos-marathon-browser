@@ -1,4 +1,5 @@
 // @flow
+import { uniq } from 'lodash'
 import type { Dispatch } from 'redux'
 import apiClient from './../api'
 import type { AppsResponse, DockerImageMetadataBatch } from './../api'
@@ -45,7 +46,7 @@ export const loadImageMetadata = (imageNames: string[]) => (dispatch: Dispatch<A
   (async () => {
     try {
       dispatch({ type: 'LoadImageMetadataStarted', imageNames })
-      const results = await apiClient.getDockerImageMetadataBatch(imageNames)
+      const results = await apiClient.getDockerImageMetadataBatch(uniq(imageNames))
 
       dispatch({
         type: 'LoadImageMetadata',

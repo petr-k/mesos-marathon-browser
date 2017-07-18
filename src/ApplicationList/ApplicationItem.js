@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import { Card, Grid, Divider, Label } from 'semantic-ui-react'
+import { Card, Grid, Divider, Label, Icon } from 'semantic-ui-react'
 import type { App } from './reducer'
 import type { AppDefinition } from './../api'
 import LabelList from './LabelList'
@@ -21,6 +21,7 @@ export default class ApplicationItem extends React.PureComponent {
           <Card.Header>
             <span className="middle-inline-block">{definition.id}</span>
             <Label className="middle-inline-block" horizontal color={color}>{ApplicationItem.getStatesString(definition)}</Label>
+            {imageMetadata.isLoading && <Label as="a" corner><Icon name="circle notched" loading /></Label>}
           </Card.Header>
           <Card.Description>
             {(appLabelCount || imageLabelCount) ? (
