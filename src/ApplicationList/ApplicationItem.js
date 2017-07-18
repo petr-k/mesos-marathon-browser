@@ -5,6 +5,7 @@ import type { App } from './reducer'
 import type { AppDefinition } from './../api'
 import LabelList from './LabelList'
 import ApplicationItemMeta from './ApplicationItemMeta'
+import ApplicationInstanceCountLabels from './ApplicationInstanceCountLabels'
 
 export default class ApplicationItem extends React.PureComponent {
   props: {
@@ -21,7 +22,13 @@ export default class ApplicationItem extends React.PureComponent {
         <Card.Content>
           <Card.Header>
             <span className="middle-inline-block">{definition.id}</span>
-            <Label className="middle-inline-block" horizontal color={color}>{ApplicationItem.getStatesString(definition)}</Label>
+            <ApplicationInstanceCountLabels
+              instances={definition.instances}
+              tasksHealthy={definition.tasksHealthy}
+              tasksRunning={definition.tasksRunning}
+              tasksUnhealthy={definition.tasksUnhealthy}
+              tasksStaged={definition.tasksStaged}
+            />
             {imageMetadata.isLoading && <Label as="a" corner><Icon name="circle notched" loading /></Label>}
           </Card.Header>
           <ApplicationItemMeta definition={definition} />
