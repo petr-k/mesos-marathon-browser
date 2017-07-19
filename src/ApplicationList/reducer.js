@@ -77,7 +77,7 @@ export default function(state: State = initialState, action: Action): State {
   switch (action.type) {
     case 'LoadApplications': {
       const apps = action.response.apps.reduce((o, p) => {
-        const existingAppObj = o[p.id]
+        const existingAppObj = state.apps[p.id]
         if (existingAppObj && isEqual(existingAppObj.definition, p)) {
           o[p.id] = existingAppObj // eslint-disable-line no-param-reassign
           return o
@@ -93,7 +93,7 @@ export default function(state: State = initialState, action: Action): State {
           definition: p
         }
         return o
-      }, state.apps)
+      }, {})
 
       return {
         ...state,

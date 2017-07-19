@@ -49,6 +49,28 @@ it('should apply loaded Docker image metadata', () => {
   expect(actual.visibleApps[1]).toBe(actual.apps.b)
 })
 
+it('should remove apps when they are not present in newly loaded list', () => {
+  const appA = appMother.get('a', 'image-name-a')
+  const appB = appMother.get('b')
+
+  const state = stateMother.get([appA, appB])
+
+  const action = {
+    type: 'LoadApplications',
+    response: {
+      apps: [
+        {
+          id: 'a',
+          instances: 2,
+        }
+      ]
+    }
+  }
+
+  const actual = reducer(state, action)
+  expect(actual.apps).not.toHaveProperty('b')
+})
+
 const appMother = {
   get(id, image = null) {
     return {
