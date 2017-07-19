@@ -6,6 +6,10 @@
   margin-left: 0.7em;
 }
 
+.application-item .header a {
+  color: rgba(0,0,0,.85);
+}
+
 .label-list-row .column {
   margin: 0
 }

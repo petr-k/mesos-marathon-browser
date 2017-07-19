@@ -35,7 +35,7 @@ export type State = {
 export const initialState: State = {
   apps: {},
   visibleApps: [],
-  isLoading: false,
+  isLoading: true,
   wasLoaded: false,
   loadError: null,
   filterText: '',

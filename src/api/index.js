@@ -65,6 +65,10 @@ export type DockerImageMetadataBatch = {
   [imageName: string]: ?DockerImageMetadata
 }
 
+export type Config = {
+  marathonUrl: string,
+}
+
 class ApiClient {
   url: string
 
@@ -90,6 +94,12 @@ class ApiClient {
       body: JSON.stringify(imageNames),
     }).then(r => r.json())
     return (result: Promise<DockerImageMetadataBatch>)
+  }
+
+  getConfig(): Promise<Config> {
+    const result = fetch(`${this.url}/config`)
+      .then(r => r.json())
+    return (result: Promise<Config>)
   }
 }
 

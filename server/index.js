@@ -20,6 +20,12 @@ app.use('/api/marathon/**', proxy({
   changeOrigin: true,
 }))
 
+app.get('/api/config', (req, res) => {
+  res.send({
+    marathonUrl: app.get('marathon_url'),
+  })
+})
+
 let imageMetadataCache = {}
 function getDockerMetadata(imageName) {
   const cachedMetadata = imageMetadataCache[imageName]

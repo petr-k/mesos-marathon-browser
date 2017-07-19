@@ -8,10 +8,12 @@ import { returnTypeOf } from './../common/redux-flow'
 import ApplicationItemGroup from './ApplicationItemGroup'
 import Filter from './Filter'
 import './ApplicationList.css'
+import { initializeConfig } from './config'
 
 class ApplicationList extends React.PureComponent {
   componentDidMount() {
-    this.props.loadApplications()
+    //  TODO: initialization (i.e. configuration retrieval) should be a proper action instead
+    initializeConfig().then(() => this.props.loadApplications())
   }
 
   props: Props

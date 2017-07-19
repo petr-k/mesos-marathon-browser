@@ -6,6 +6,7 @@ import type { AppDefinition } from './../api'
 import LabelList from './LabelList'
 import ApplicationItemMeta from './ApplicationItemMeta'
 import ApplicationInstanceCountLabels from './ApplicationInstanceCountLabels'
+import { getConfig } from './config'
 
 export default class ApplicationItem extends React.PureComponent {
   props: {
@@ -17,11 +18,15 @@ export default class ApplicationItem extends React.PureComponent {
     const [appLabelCount, imageLabelCount] = [definition.labels, imageMetadata.labels].map(Object.keys).map(v => v.length)
     const color = ApplicationItem.getStatesColor(definition)
 
+    const marathonUrl = getConfig().marathonUrl
+
     return (
       <Card fluid color={color} className="application-item">
         <Card.Content>
           <Card.Header>
-            <span className="middle-inline-block">{definition.id}</span>
+            {marathonUrl
+              ? <a className="middle-inline-block" target="_blank" href={`${marathonUrl}ui/#apps/${encodeURIComponent(definition.id)}`}>{definition.id}</a>
+              : <span className="middle-inline-block">{definition.id}</span>}
             <ApplicationInstanceCountLabels
               instances={definition.instances}
               tasksHealthy={definition.tasksHealthy}
