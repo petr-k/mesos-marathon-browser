@@ -1,6 +1,6 @@
 // @flow
 import { difference } from 'lodash'
-import { select, take, put } from 'redux-saga/effects'
+import { take, put } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import { loadApplications, loadImageMetadata } from './actions'
 import type { LoadApplications } from './actions'
@@ -12,7 +12,7 @@ function* saga(): any {
     const loadAction: LoadApplications = yield take('LoadApplications')
 
     const imageNames = loadAction.response.apps.map(getDockerImageName).filter(n => n)
-    const unknownImageNames = difference(imageNames, loadedImageNames)
+    const unknownImageNames = ((difference(imageNames, loadedImageNames): any): string[])
 
     if (unknownImageNames.length > 0) {
       loadedImageNames = [...loadedImageNames, ...unknownImageNames]
