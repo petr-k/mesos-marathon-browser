@@ -1,18 +1,11 @@
 import reducer from './reducer'
 
 it('should apply loaded Docker image metadata', () => {
-  const appA = getApp('a', 'image-name-a')
-  const appB = getApp('b')
-  const appC = getApp('c', 'image-name-c')
+  const appA = appMother.get('a', 'image-name-a')
+  const appB = appMother.get('b')
+  const appC = appMother.get('c', 'image-name-c')
 
-  const state = {
-    apps: {
-      [appA.definition.id]: appA,
-      [appB.definition.id]: appB,
-      [appC.definition.id]: appC,
-    },
-    visibleApps: [appA, appB, appC],
-  }
+  const state = stateMother.get([appA, appB, appC])
 
   const action = {
     type: 'LoadImageMetadata',
@@ -56,18 +49,29 @@ it('should apply loaded Docker image metadata', () => {
   expect(actual.visibleApps[1]).toBe(actual.apps.b)
 })
 
-function getApp(id, image = null) {
-  return {
-    definition: {
-      id,
-      container: image
-        ? {
-          type: 'DOCKER',
-          docker: {
-            image,
-          },
-        }
-        : null,
+const appMother = {
+  get(id, image = null) {
+    return {
+      definition: {
+        id,
+        container: image
+          ? {
+            type: 'DOCKER',
+            docker: {
+              image,
+            },
+          }
+          : null,
+      }
+    }
+  }
+}
+
+const stateMother = {
+  get(apps) {
+    return {
+      apps: Object.assign(...apps.map(a => ({ [a.definition.id]: a }))),
+      visibleApps: apps,
     }
   }
 }
