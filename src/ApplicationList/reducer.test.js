@@ -1,29 +1,17 @@
 import reducer from './reducer'
 
-
 it('should apply loaded Docker image metadata', () => {
-  const appA = {
-    definition: {
-      id: 'a',
-      container: {
-        type: 'DOCKER',
-        docker: {
-          image: 'image-name-a'
-        }
-      }
-    },
-  }
-  const appB = {
-    definition: {
-      id: 'b'
-    }
-  }
+  const appA = getApp('a', 'image-name-a')
+  const appB = getApp('b')
+  const appC = getApp('c', 'image-name-c')
+
   const state = {
     apps: {
-      a: appA,
-      b: appB,
+      [appA.definition.id]: appA,
+      [appB.definition.id]: appB,
+      [appC.definition.id]: appC,
     },
-    visibleApps: [appA, appB],
+    visibleApps: [appA, appB, appC],
   }
 
   const action = {
@@ -34,7 +22,8 @@ it('should apply loaded Docker image metadata', () => {
           x: 1,
           y: 2,
         }
-      }
+      },
+      'image-name-c': null,
     }
   }
 
@@ -47,8 +36,17 @@ it('should apply loaded Docker image metadata', () => {
           labels: {
             x: 1,
             y: 2
-          }
+          },
+          loadError: false,
+          isLoading: false,
         }
+      },
+      c: {
+        imageMetadata: {
+          labels: {},
+          loadError: true,
+          isLoading: false,
+        },
       }
     }
   })
@@ -57,3 +55,19 @@ it('should apply loaded Docker image metadata', () => {
   expect(actual.visibleApps[0]).toBe(actual.apps.a)
   expect(actual.visibleApps[1]).toBe(actual.apps.b)
 })
+
+function getApp(id, image = null) {
+  return {
+    definition: {
+      id,
+      container: image
+        ? {
+          type: 'DOCKER',
+          docker: {
+            image,
+          },
+        }
+        : null,
+    }
+  }
+}

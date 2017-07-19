@@ -29,7 +29,8 @@ export default class ApplicationItem extends React.PureComponent {
               tasksUnhealthy={definition.tasksUnhealthy}
               tasksStaged={definition.tasksStaged}
             />
-            {imageMetadata.isLoading && <Label as="a" corner><Icon name="circle notched" loading /></Label>}
+            {imageMetadata.isLoading && <Label corner><Icon name="circle notched" loading /></Label>}
+            {imageMetadata.loadError && <Label as="span" title="Error loading Docker image info" corner color="pink"><Icon name="exclamation" /></Label>}
           </Card.Header>
           <ApplicationItemMeta definition={definition} />
           <Card.Description>

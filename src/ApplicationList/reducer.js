@@ -12,7 +12,7 @@ export type App = {
 export type ImageMetadata = {
   +labels: ImageLabels,
   +isLoading: ?boolean,
-  loaded: ?boolean,
+  +loadError: ?boolean,
 }
 
 type AppsById = {
@@ -50,13 +50,10 @@ function reduceImageMetadata<A, T: { [imageName: string]: A }>(state: State, obj
   const apps = mapValues(state.apps, (app: App) => {
     const imageName = getDockerImageName(app.definition)
     if (imageName) {
-      const metadataObj = obj[imageName]
-      if (metadataObj) {
-        const metadata = metadataReducer(app.imageMetadata, metadataObj)
-        return {
-          ...app,
-          imageMetadata: metadata,
-        }
+      const metadata = metadataReducer(app.imageMetadata, obj[imageName] || null)
+      return {
+        ...app,
+        imageMetadata: metadata,
       }
     }
     return app
@@ -149,7 +146,7 @@ export default function(state: State = initialState, action: Action): State {
         ...m,
         labels: r ? r.labels : {},
         isLoading: false,
-        loaded: true,
+        loadError: !r,
       }))
     case 'LoadImageMetadataFailed':
       return state
