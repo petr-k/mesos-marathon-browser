@@ -55,20 +55,6 @@ export default class ApplicationItem extends React.PureComponent {
     )
   }
 
-  static getStatesString(definition: AppDefinition) {
-    const states: {[string]: number} = {
-      Staged: definition.tasksStaged,
-      Healthy: definition.tasksHealthy,
-      Unhealthy: definition.tasksUnhealthy,
-    }
-    const statesString = Object.keys(states)
-      .map(label => ({ label, count: states[label] }))
-      .filter(c => c.count > 0)
-      .map(c => `${c.count} ${c.label}`)
-      .join(', ')
-    return `${definition.tasksRunning} Running${statesString ? ', ' : ''}${statesString}`
-  }
-
   static getStatesColor(definition: AppDefinition) {
     if (definition.tasksRunning === 0 && definition.tasksStaged > 0) {
       return 'yellow'
