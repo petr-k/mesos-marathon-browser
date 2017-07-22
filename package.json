@@ -1,11 +1,12 @@
 {
-  "name": "mm-browser",
+  "name": "mesos-marathon-browser",
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "install:dev": "yarn && cd server && yarn && cd ..",
+    "start": "concurrently \"yarn start:server\" \"yarn start:client\"",
     "start:client": "react-scripts start",
     "start:server": "node server/index.js",
-    "start": "concurrently \"yarn start:server\" \"yarn start:client\"",
     "build": "react-scripts build",
     "build:clean": "rimraf build",
     "build:prod": "yarn build:clean && yarn build",
@@ -16,9 +17,6 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.23.0",
-    "bluebird": "^3.5.0",
-    "body-parser": "^1.17.2",
-    "docker-registry-client": "^3.2.7",
     "lodash": "^4.17.4",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
