@@ -1,3 +1,4 @@
+const Promise = require('bluebird')
 const express = require('express')
 const proxy = require('http-proxy-middleware')
 const dockerMetadata = require('./dockerMetadata')
@@ -62,10 +63,11 @@ app.post('/api/docker-registry/metadata', (req, res) => {
     if (imageNames.length === 0) {
       res.send({})
     } else {
-      Promise.all(imageNames.map(imageName => getDockerMetadata(imageName)
-        .then(m => ({ [imageName]: m }))
-      ))
-      .then(results => res.send(Object.assign(...results)))
+      Promise.map(
+        imageNames,
+        imageName => getDockerMetadata(imageName).then(m => ({ [imageName]: m })),
+        { concurrency: 50 }
+      ).then(results => res.send(Object.assign(...results)))
     }
   } else {
     console.log(req.body)
