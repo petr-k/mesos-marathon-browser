@@ -28,11 +28,12 @@ export default class ApplicationInstanceCountLabels extends React.PureComponent 
     const labels = []
     if (tasksHealthy) {
       labels.push(label('Healthy', 'green', tasksHealthy))
-    } else if (tasksRunning) {
-      labels.push(label('Running', undefined, tasksRunning))
     }
     if (tasksUnhealthy) {
       labels.push(label('Unhealthy', 'red', tasksUnhealthy))
+    }
+    if (tasksRunning && !tasksHealthy && !tasksUnhealthy) {
+      labels.push(label('Running', undefined, tasksRunning))
     }
     if (tasksStaged) {
       labels.push(label('Staged', 'yellow', tasksStaged))
