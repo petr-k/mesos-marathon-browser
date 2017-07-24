@@ -3,6 +3,8 @@
 
 mm-browser provides a simple interface to browse applications in a Mesos/Marathon cluster, along with some associated metadata such as Docker image labels. It is meant to complement the official Marathon UI.
 
+![mesos-marathon browser demo](mm-browser.gif)
+
 Some of its features include:
 * Shows basic application settings and instance counts
 * Periodically refreshes applications and their properties with current state in Marathon
