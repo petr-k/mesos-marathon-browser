@@ -2,7 +2,7 @@ FROM node:8 AS builder
 
 COPY src /data/builder/src
 COPY public /data/builder/public
-COPY package.json yarn.lock .babelrc /data/builder/
+COPY package.json yarn.lock /data/builder/
 
 WORKDIR /data/builder
 

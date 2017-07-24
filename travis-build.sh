@@ -1,4 +1,6 @@
 #!/bin/bash
+SET -e errexit
+SET -o pipefail
 
 IMAGE_NAME=petkr/mesos-marathon-browser
 
