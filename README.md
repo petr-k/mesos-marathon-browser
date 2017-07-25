@@ -12,7 +12,7 @@ Some of its features include:
 * Conveniently shows Marathon application labels and Docker image labels in one place
 
 ## Running
-Please refer to [pekr/mesos-marathon-browser](https://hub.docker.com/r/petkr/mesos-marathon-browser/) on Docker Hub for instructions on how to run the application in a Docker container.
+Please refer to [petkr/mesos-marathon-browser](https://hub.docker.com/r/petkr/mesos-marathon-browser/) on Docker Hub for instructions on how to run the application in a Docker container.
 
 ## Development
 
