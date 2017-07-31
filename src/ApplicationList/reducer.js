@@ -1,5 +1,5 @@
 // @flow
-import { mapValues, includes, isEqual } from 'lodash'
+import { mapValues, includes, isEqual, has } from 'lodash'
 import type { AppDefinition } from './../api'
 import type { Action } from './actions'
 import appMatcher from './appMatcher'
@@ -49,7 +49,7 @@ function visibleApps(state: State, apps: AppsById = state.apps, filter: string =
 function reduceImageMetadata<A, T: { [imageName: string]: A }>(state: State, obj: T, metadataReducer: (ImageMetadata, A) => ImageMetadata): State {
   const apps = mapValues(state.apps, (app: App) => {
     const imageName = getDockerImageName(app.definition)
-    if (imageName) {
+    if (imageName && has(obj, imageName)) {
       const metadata = metadataReducer(app.imageMetadata, obj[imageName] || null)
       return {
         ...app,

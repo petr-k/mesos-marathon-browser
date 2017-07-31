@@ -4,8 +4,9 @@ it('should apply loaded Docker image metadata', () => {
   const appA = appMother.get('a', 'image-name-a')
   const appB = appMother.get('b')
   const appC = appMother.get('c', 'image-name-c')
+  const appD = appMother.get('d', 'image-name-d', { label: 'value' })
 
-  const state = stateMother.get([appA, appB, appC])
+  const state = stateMother.get([appA, appB, appC, appD])
 
   const action = {
     type: 'LoadImageMetadata',
@@ -40,6 +41,13 @@ it('should apply loaded Docker image metadata', () => {
           loadError: true,
           isLoading: false,
         },
+      },
+      d: {
+        imageMetadata: {
+          labels: {
+            label: 'value',
+          },
+        },
       }
     }
   })
@@ -72,7 +80,7 @@ it('should remove apps when they are not present in newly loaded list', () => {
 })
 
 const appMother = {
-  get(id, image = null) {
+  get(id, image = null, labels = null) {
     return {
       definition: {
         id,
@@ -84,7 +92,11 @@ const appMother = {
             },
           }
           : null,
-      }
+      },
+      imageMetadata: labels
+        ? {
+          labels,
+        } : undefined,
     }
   }
 }
