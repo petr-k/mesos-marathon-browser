@@ -1,7 +1,11 @@
 // @flow
 import React from 'react'
-import Linkify from 'react-linkify'
+import Linkify, { linkify } from 'react-linkify'
 import { sortBy } from 'lodash'
+
+linkify.set({
+  fuzzyEmail: false,
+})
 
 export default class LabelList extends React.PureComponent {
   props: {
